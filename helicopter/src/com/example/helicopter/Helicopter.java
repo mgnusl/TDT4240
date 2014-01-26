@@ -63,10 +63,13 @@ public class Helicopter extends Sprite {
 		canvas.drawBitmap(bitmap, sourceRect, destRect, null);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void flip() {
 		Matrix flipMatrix = new Matrix();
 		flipMatrix.preScale(-1.0f, 1.0f);
 		Bitmap flipSprite = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), flipMatrix, false);
+		flipSprite.setDensity(DisplayMetrics.DENSITY_DEFAULT);
+		bitmap = new BitmapDrawable(flipSprite).getBitmap();
 	}
 
 
