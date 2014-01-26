@@ -63,6 +63,12 @@ public class Helicopter extends Sprite {
 		canvas.drawBitmap(bitmap, sourceRect, destRect, null);
 	}
 	
+	// returns a Rectangle representing the space the Sprite occupies
+	public Rect getSpriteBounds (){
+		Rect spriteBounds = new Rect((int)getX(), (int)getY(), (int)getX() + spriteWidth, (int)getY() + spriteHeight);
+		return spriteBounds;
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void flip() {
 		Matrix flipMatrix = new Matrix();
@@ -71,7 +77,6 @@ public class Helicopter extends Sprite {
 		flipSprite.setDensity(DisplayMetrics.DENSITY_DEFAULT);
 		bitmap = new BitmapDrawable(flipSprite).getBitmap();
 	}
-
 
 	public void setX(float x) {
 		this.x = x;
@@ -88,9 +93,5 @@ public class Helicopter extends Sprite {
 	public float getY() {
 		return y;
 	}
-
-	public Rect getSpriteRect() {
-		return new Rect((int) getX(), (int) getY(), (int) getX() + spriteWidth,
-				(int) getY() + spriteHeight);
-	}
+	
 }

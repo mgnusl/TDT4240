@@ -51,6 +51,17 @@ public class GameState extends State implements TouchListener {
 		heli4.setSpeed(250, 500);
 		heli4.flip(); //initial flip to get heli to face the right direction
 		heli4.update(System.currentTimeMillis());
+		
+		//heli krasj i hverandre
+		if(heli1.getSpriteBounds().intersect(heli2.getSpriteBounds()) || heli2.getSpriteBounds().intersect(heli1.getSpriteBounds())) {
+			// do something
+			System.out.println("1 og 2 krasj");
+		}
+		
+		if(heli1.collides(heli2)) {
+			// do something
+			System.out.println("1 og 2 krasj");
+		}
 
 	
 	}
