@@ -1,43 +1,46 @@
 package com.example.helicopter;
 
+import android.content.res.Resources;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import sheep.game.Sprite;
 import sheep.game.State;
-import sheep.graphics.Image;
 import sheep.input.TouchListener;
 
 public class GameState extends State implements TouchListener {
 	
 	private int canvasHeight, canvasWidth;
-	private Sprite heliSprite;
-	private final int HELI_WIDTH = 130;
-	private final int HELI_HEIGHT = 52;
+	//private final int HELI_WIDTH = 130;
+	//private final int HELI_HEIGHT = 52;
+	
+	private Helicopter heli1;
 	
 	
 	
-	public GameState() {
-		heliSprite = new Sprite(new Image(R.drawable.heli_west1));
-		heliSprite.setSpeed(200, 200);
+	public GameState(Resources r) {
+		
+		heli1 = new Helicopter(BitmapFactory.decodeResource(r, R.drawable.heli_all_frames), 
+				50, 50, 130, 52, 30, 4);
+		heli1.setSpeed(700, 700);
+		heli1.update(System.currentTimeMillis());
 	
 	}
  
 	@Override
 	public void update(float dt) {
-			
-		if(heliSprite.getX() > (canvasWidth - HELI_WIDTH) || heliSprite.getX() < 0) {
+		
+		//heli1
+		heli1.update(System.currentTimeMillis());
+		if(heli1.getX() > (canvasWidth - 130) || heli1.getX() < 0) {
 			System.out.println("Krasj side");
-			heliSprite.setSpeed(-heliSprite.getSpeed().getX(), heliSprite.getSpeed().getY());
+			heli1.setSpeed(-heli1.getSpeed().getX(), heli1.getSpeed().getY());
 		}
 		
-		if(heliSprite.getY() > (canvasHeight - HELI_HEIGHT) || heliSprite.getY() < 0) {
+		if(heli1.getY() > (canvasHeight - 52) || heli1.getY() < 0) {
 			System.out.println("Krasj top/bunn");
-			heliSprite.setSpeed(heliSprite.getSpeed().getX(), -heliSprite.getSpeed().getY());
+			heli1.setSpeed(heli1.getSpeed().getX(), -heli1.getSpeed().getY());
 		}
 		
-		
-		
-		heliSprite.update(dt);
 	}
 
 	@Override
@@ -45,7 +48,7 @@ public class GameState extends State implements TouchListener {
 		canvas.drawColor(Color.BLACK);
 		canvasHeight = canvas.getHeight();
 		canvasWidth = canvas.getWidth();
-		heliSprite.draw(canvas);
+		heli1.draw(canvas);
 	}
 
 }
