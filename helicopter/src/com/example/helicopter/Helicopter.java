@@ -7,26 +7,29 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 public class Helicopter extends Sprite {
 
 	// Kilde animasjon av helikopter sprite
 	// http://www.javacodegeeks.com/2011/07/android-game-development-sprite.html
 
-	private Bitmap bitmap; // the animation sequence
-	private Rect sourceRect; // the rectangle to be drawn from the animation
-								// bitmap
-	private int frameNr; // number of frames in animation
-	private int currentFrame; // the current frame
-	private long frameTicker; // the time of the last frame update
-	private int framePeriod; // milliseconds between each frame (1000/fps)
-	private int spriteWidth; // the width of the sprite to calculate the cut out
-								// rectangle
-	private int spriteHeight; // the height of the sprite
-	private float x; // the X coordinate of the object (top left of the image)
-	private float y; // the Y coordinate of the object (top left of the image)
+	private static final String TAG = null;
+	private Bitmap bitmap; 
+	private Rect sourceRect; 
+								
+	private int frameNr; 
+	private int currentFrame;
+	private long frameTicker; 
+	private int framePeriod; 
+	private int spriteWidth; 
+								
+	private int spriteHeight;
+	private float x;
+	private float y;
 
 	public Helicopter(Bitmap bitmap, int x, int y, int width, int height, int fps, int frameCount) {
+				
 		this.bitmap = bitmap;
 		this.x = x;
 		this.y = y;
@@ -64,7 +67,7 @@ public class Helicopter extends Sprite {
 	}
 	
 	// returns a Rectangle representing the space the Sprite occupies
-	public Rect getSpriteBounds (){
+	public Rect getSpriteBounds(){
 		Rect spriteBounds = new Rect((int)getX(), (int)getY(), (int)getX() + spriteWidth, (int)getY() + spriteHeight);
 		return spriteBounds;
 	}
