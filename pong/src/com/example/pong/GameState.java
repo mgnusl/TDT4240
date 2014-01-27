@@ -9,6 +9,7 @@ import sheep.input.TouchListener;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.Paint.Align;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -77,6 +78,16 @@ public class GameState extends State implements CollisionListener, TouchListener
 			scorePlayer2++;
 		}
 		
+		// Check if game over
+		if(scorePlayer1 == 4){
+			getGame().popState();
+			getGame().pushState(new ScoreScreen("Player 1"));
+		}
+		if(scorePlayer2 == 4){
+			getGame().popState();
+			getGame().pushState(new ScoreScreen("Player 2"));
+		}
+		
 	}
 	
 	@Override
@@ -94,7 +105,9 @@ public class GameState extends State implements CollisionListener, TouchListener
 		
 		Font pongFont = new Font(0, 0, 0, 50, Typeface.DEFAULT_BOLD, Typeface.BOLD);
 		Font scoreFont = new Font(0, 0, 0, 50, Typeface.DEFAULT, Typeface.NORMAL);
-		canvas.drawText("PONG", canvasWidth/2-60, 60, pongFont);
+		scoreFont.setTextAlign(Align.CENTER);
+		pongFont.setTextAlign(Align.CENTER);
+		canvas.drawText("PONG", canvasWidth/2, 60, pongFont);
 		canvas.drawText(Integer.toString(scorePlayer1), canvasWidth/4, 60, scoreFont);
 		canvas.drawText(Integer.toString(scorePlayer2), canvasWidth/4*3, 60, scoreFont);
 		
