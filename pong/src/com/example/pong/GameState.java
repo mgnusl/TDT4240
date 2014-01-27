@@ -16,7 +16,8 @@ public class GameState extends State implements CollisionListener, TouchListener
 	
 	private int canvasHeight, canvasWidth;
 	private Sprite ponger1, ponger2, ball;
-	private Image pongerImage;
+	private Image pongerImage, ballImage;
+	private int scorePlayer1, scorePlayer2;
 	
 	private static final String TAG = "APP";
 	
@@ -25,16 +26,19 @@ public class GameState extends State implements CollisionListener, TouchListener
 		
 		// for comparison purposes
 		pongerImage = new Image(R.drawable.ponger2);
+		ballImage = new Image(R.drawable.ball2);
 		
 		ponger1 = new Sprite(new Image(R.drawable.ponger2));
 		ponger2 = new Sprite(new Image(R.drawable.ponger2));
-		ball = new Sprite(new Image(R.drawable.ball));
+		ball = new Sprite(new Image(R.drawable.ball2));
 		ball.setSpeed(200, 200);
-		ball.setPosition(100, 100);
+		ball.setPosition(200, 200);
 		
-		ponger1.setPosition(200, 100);
-		ponger2.setPosition(200, 500);
+		ponger1.setPosition(300, 100);
+		ponger2.setPosition(300, 500);
 		
+		scorePlayer1 = 0; 
+		scorePlayer2 = 0;
 		
 	}
 	
@@ -46,8 +50,33 @@ public class GameState extends State implements CollisionListener, TouchListener
 		ball.update(dt);
 		ponger1.update(dt);
 		ponger2.update(dt);
-		
 		//Log.d(TAG, "PONG");
+		
+		// Crash wall
+		if(ball.getX() >= canvasWidth-ballImage.getWidth() || ball.getX() <= 0) {
+			ball.setSpeed(-ball.getSpeed().getX(), ball.getSpeed().getY());
+		}
+		
+		// Crash ponger 
+		if(ball.collides(ponger1)) {
+			ball.setSpeed(ball.getSpeed().getX(), -ball.getSpeed().getY());
+		}
+		if(ball.collides(ponger2)) {
+			ball.setSpeed(ball.getSpeed().getX(), -ball.getSpeed().getY());
+		}
+		
+		// Ball passes ponger. Reset ball position and increment score (in that order)
+		if(ball.getY() > ponger2.getY()) {
+			//Log.d(TAG, "FORBI BOT");
+			ball.setPosition(canvasWidth/2, canvasHeight/2);
+			scorePlayer1++;
+		}
+		if(ball.getY() < ponger1.getY()) {
+			//Log.d(TAG, "FORBI TOP");
+			ball.setPosition(canvasWidth/2, canvasHeight/2);
+			scorePlayer2++;
+		}
+		
 	}
 	
 	@Override
@@ -55,21 +84,26 @@ public class GameState extends State implements CollisionListener, TouchListener
 		canvas.drawColor(Color.WHITE);
 		canvasHeight = canvas.getHeight();
 		canvasWidth = canvas.getWidth();
+		
+		ponger1.setPosition(ponger1.getX(), canvasHeight/6);
+		ponger2.setPosition(ponger2.getX(), canvasHeight/6*5);
+		
 		ball.draw(canvas);
 		ponger1.draw(canvas);
 		ponger2.draw(canvas);
 		
-		Font f = new Font(0, 0, 0, 50, Typeface.DEFAULT_BOLD, Typeface.BOLD);
-		canvas.drawText("PONG", canvasWidth/2-60, 60, f);
+		Font pongFont = new Font(0, 0, 0, 50, Typeface.DEFAULT_BOLD, Typeface.BOLD);
+		Font scoreFont = new Font(0, 0, 0, 50, Typeface.DEFAULT, Typeface.NORMAL);
+		canvas.drawText("PONG", canvasWidth/2-60, 60, pongFont);
+		canvas.drawText(Integer.toString(scorePlayer1), canvasWidth/4, 60, scoreFont);
+		canvas.drawText(Integer.toString(scorePlayer2), canvasWidth/4*3, 60, scoreFont);
+		
 	}
-
-
 
 	@Override
 	public void collided(Sprite a, Sprite b) {
 		
 	}
-
 
 	// Move ponger on touch
 	@Override
@@ -89,21 +123,4 @@ public class GameState extends State implements CollisionListener, TouchListener
 		
 	}
 	
-	
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
