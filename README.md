@@ -1,2 +1,2 @@
-TDT4240
+TDT4240 - Software Architecture
 =======
