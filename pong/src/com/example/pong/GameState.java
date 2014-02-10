@@ -1,6 +1,7 @@
 package com.example.pong;
 
 import sheep.collision.CollisionListener;
+import sheep.game.Game;
 import sheep.game.Sprite;
 import sheep.game.State;
 import sheep.graphics.Font;
@@ -19,10 +20,12 @@ public class GameState extends State implements CollisionListener, TouchListener
 	private Sprite ponger1, ponger2, ball;
 	private Image pongerImage, ballImage;
 	private int scorePlayer1, scorePlayer2;
-	
+
 	private static final String TAG = "APP";
-	
-	
+
+    // singleton pattern
+    private static GameState instance = null;
+
 	public GameState() {
 		
 		// for comparison purposes
@@ -42,9 +45,18 @@ public class GameState extends State implements CollisionListener, TouchListener
 		scorePlayer2 = 0;
 		
 	}
-	
-	
-	
+
+    // singleton pattern exercise
+    public static synchronized GameState getInstance() {
+
+        if(instance == null) {
+            instance = new GameState();
+        }
+
+        return instance;
+
+    }
+
 	@Override
 	public void update(float dt) {
 		
