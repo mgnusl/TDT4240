@@ -13,12 +13,11 @@ public class MainActivity extends Activity {
 
         // singleton pattern exercise
 
-
 		super.onCreate(savedInstanceState);
 		// Create the game.
 		Game game = new Game(this, null);
 		// Push the main state.
-		game.pushState(new GameState());
+		game.pushState(GameState.getInstance());
 		// View the game.
 		setContentView(game);
 		

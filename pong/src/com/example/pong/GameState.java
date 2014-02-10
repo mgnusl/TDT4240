@@ -26,7 +26,7 @@ public class GameState extends State implements CollisionListener, TouchListener
     // singleton pattern
     private static GameState instance = null;
 
-	public GameState() {
+	protected GameState() {
 		
 		// for comparison purposes
 		pongerImage = new Image(R.drawable.ponger2);
@@ -35,7 +35,7 @@ public class GameState extends State implements CollisionListener, TouchListener
 		ponger1 = new Sprite(new Image(R.drawable.ponger2));
 		ponger2 = new Sprite(new Image(R.drawable.ponger2));
 		ball = new Sprite(new Image(R.drawable.ball2));
-		ball.setSpeed(200, 200);
+		ball.setSpeed(400, 400);
 		ball.setPosition(200, 200);
 		
 		ponger1.setPosition(300, 100);
@@ -47,15 +47,13 @@ public class GameState extends State implements CollisionListener, TouchListener
 	}
 
     // singleton pattern exercise
-    public static synchronized GameState getInstance() {
-
+    public static GameState getInstance() {
         if(instance == null) {
             instance = new GameState();
         }
-
         return instance;
-
     }
+
 
 	@Override
 	public void update(float dt) {
