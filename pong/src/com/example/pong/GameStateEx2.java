@@ -1,34 +1,42 @@
 package com.example.pong;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint.Align;
+import android.graphics.Typeface;
+import android.util.Log;
+import android.view.MotionEvent;
 import sheep.collision.CollisionListener;
-import sheep.game.Game;
 import sheep.game.Sprite;
 import sheep.game.State;
 import sheep.graphics.Font;
 import sheep.graphics.Image;
 import sheep.input.TouchListener;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.graphics.Paint.Align;
-import android.util.Log;
-import android.view.MotionEvent;
 
-import java.util.Observable;
+import java.util.ArrayList;
 
-public class GameState extends State implements CollisionListener, TouchListener {
-	
+public class GameStateEx2 extends State implements CollisionListener, TouchListener {
+
 	private int canvasHeight, canvasWidth;
 	private Sprite ponger1, ponger2, ball;
 	private Image pongerImage, ballImage;
-	private int scorePlayer1, scorePlayer2;
+	//private int scorePlayer1, scorePlayer2;
+
+    // for exercise 2
+    private ScoreCounter score;
+    private ArrayList<ScoreCounter> observerCollection;
 
 	private static final String TAG = "APP";
 
     // singleton pattern
-    private static GameState instance = null;
+    private static GameStateEx2 instance = null;
 
-	protected GameState() {
+	protected GameStateEx2() {
+
+        // for exercise 2
+        score = new ScoreCounter();
+        observerCollection = new ArrayList<ScoreCounter>();
+        observerCollection.add(score);
 		
 		// for comparison purposes
 		pongerImage = new Image(R.drawable.ponger2);
@@ -42,16 +50,14 @@ public class GameState extends State implements CollisionListener, TouchListener
 		
 		ponger1.setPosition(300, 100);
 		ponger2.setPosition(300, 500);
-		
-		scorePlayer1 = 0; 
-		scorePlayer2 = 0;
+
 		
 	}
 
     // singleton pattern exercise
-    public static GameState getInstance() {
+    public static GameStateEx2 getInstance() {
         if(instance == null) {
-            instance = new GameState();
+            instance = new GameStateEx2();
         }
         return instance;
     }
@@ -82,23 +88,23 @@ public class GameState extends State implements CollisionListener, TouchListener
 		if(ball.getY() > ponger2.getY()) {
 			//Log.d(TAG, "FORBI BOT");
 			ball.setPosition(canvasWidth/2, canvasHeight/2);
-			scorePlayer1++;
+            notifyBallObservers(1);
 		}
 		if(ball.getY() < ponger1.getY()) {
 			//Log.d(TAG, "FORBI TOP");
 			ball.setPosition(canvasWidth/2, canvasHeight/2);
-			scorePlayer2++;
+            notifyBallObservers(2);
 		}
 		
 		// Check if game over
-		if(scorePlayer1 == 4){
+		if(score.getScorePlayer1() == 4){
 			getGame().popState();
 			getGame().pushState(new ScoreScreen("Player 1"));
 		}
-		if(scorePlayer2 == 4){
+		if(score.getScorePlayer2() == 4){
 			getGame().popState();
 			getGame().pushState(new ScoreScreen("Player 2"));
-		}
+        }
 		
 	}
 	
@@ -120,8 +126,8 @@ public class GameState extends State implements CollisionListener, TouchListener
 		scoreFont.setTextAlign(Align.CENTER);
 		pongFont.setTextAlign(Align.CENTER);
 		canvas.drawText("PONG", canvasWidth/2, 60, pongFont);
-		canvas.drawText(Integer.toString(scorePlayer1), canvasWidth/4, 60, scoreFont);
-		canvas.drawText(Integer.toString(scorePlayer2), canvasWidth/4*3, 60, scoreFont);
+		canvas.drawText(Integer.toString(score.getScorePlayer1()), canvasWidth/4, 60, scoreFont);
+		canvas.drawText(Integer.toString(score.getScorePlayer2()), canvasWidth/4*3, 60, scoreFont);
 		
 	}
 
@@ -147,5 +153,14 @@ public class GameState extends State implements CollisionListener, TouchListener
 		return super.onTouchMove(event);
 		
 	}
+
+    public void notifyBallObservers(int pointForPlayer) {
+        if(pointForPlayer == 1)
+            score.incrementPlayer1Score();
+
+        if(pointForPlayer == 2)
+            score.incrementPlayer2Score();
+
+    }
 	
 }

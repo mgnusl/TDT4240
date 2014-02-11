@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
 		// Create the game.
 		Game game = new Game(this, null);
 		// Push the main state.
-		game.pushState(GameState.getInstance());
+		game.pushState(GameStateEx2.getInstance());
 		// View the game.
 		setContentView(game);
 		
